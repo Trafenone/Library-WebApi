@@ -2,9 +2,9 @@
 
 namespace Library.Models.Repository
 {
-    public interface IBookRepository
+    public interface IRepository
     {
-        public List<Book> GetBooks();
+        public Task<List<Book>> GetBooks();
         public int SaveBook(Book book);
         public void DeleteBook(int id);
         public int SaveReview(int id);

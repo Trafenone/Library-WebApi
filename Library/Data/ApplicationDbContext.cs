@@ -9,6 +9,8 @@ namespace Library.Data
             optionsBuilder.UseInMemoryDatabase("Library");
         }
 
-
+        public DbSet<Review> Reviews { get; set; } = null!;
+        public DbSet<Rating> Ratings { get; set; } = null!;
+        public DbSet<Book> Books { get; set; } = null!;
     }
 }

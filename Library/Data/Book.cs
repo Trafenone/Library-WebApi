@@ -8,5 +8,8 @@
         public string Content { get; set; }
         public string Author { get; set; }
         public string Genre { get; set; }
+
+        public List<Review>? Reviews { get; set; } = new();
+        public List<Rating>? Ratings { get; set; } = new();
     }
 }

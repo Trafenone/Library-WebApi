@@ -14,34 +14,57 @@ namespace Library.Models.Repository
 
         public async Task<List<Book>> GetBooks()
         {
-            return await _context.Books.ToListAsync();
+            return await _context.Books
+                .Include(b => b.Reviews)
+                .Include(b => b.Ratings)
+                .ToListAsync();
         }
 
-        public void DeleteBook(int id)
+        public async Task DeleteBook(int id)
         {
             Book? book = _context.Books.Where(x => x.Id == id).FirstOrDefault();
 
-            if(book != null)
+            if (book != null)
             {
                 _context.Books.Remove(book);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public int SaveBook(Book book)
+        public async Task<int> SaveBook(Book book)
         {
-            throw new NotImplementedException();
+            await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
+
+            return book.Id;
         }
 
-        public int SaveRating(int id)
+        public async Task<int> UpdateBook(Book book)
         {
-            throw new NotImplementedException();
+            if (!_context.Books.Any(x => x.Id == book.Id))
+                return 0;
+
+            _context.Update(book);
+            await _context.SaveChangesAsync();
+
+            return book.Id;
         }
 
-        public int SaveReview(int id)
+        public async Task<int> SaveRating(Rating rating)
         {
-            throw new NotImplementedException();
+            await _context.Ratings.AddAsync(rating);
+            await _context.SaveChangesAsync();
+
+            return rating.Id;
+        }
+
+        public async Task<int> SaveReview(Review review)
+        {
+            await _context.Reviews.AddAsync(review);
+            await _context.SaveChangesAsync();
+
+            return review.Id;
         }
     }
 }

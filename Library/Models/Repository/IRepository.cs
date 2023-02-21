@@ -5,9 +5,10 @@ namespace Library.Models.Repository
     public interface IRepository
     {
         public Task<List<Book>> GetBooks();
-        public int SaveBook(Book book);
-        public void DeleteBook(int id);
-        public int SaveReview(int id);
-        public int SaveRating(int id);
+        public Task<int> SaveBook(Book book);
+        public Task DeleteBook(int id);
+        public Task<int> UpdateBook(Book book);
+        public Task<int> SaveReview(Review review);
+        public Task<int> SaveRating(Rating rating);
     }
 }

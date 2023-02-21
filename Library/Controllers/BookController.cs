@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Conventions;
 using Library.Data;
 using Library.Models.DTO;
 using Library.Models.Repository;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using System.Text.Json;
 
 namespace Library.Controllers
 {
@@ -11,21 +13,26 @@ namespace Library.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly IRepository _repository;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
+        private readonly ILogger<BookController> _logger;
 
-        public BookController(IRepository repository, IMapper mapper, IConfiguration configuration)
+        public BookController(IConfiguration configuration, IRepository repository, IMapper mapper, ILogger<BookController> logger)
         {
+            _configuration = configuration;
             _repository = repository;
             _mapper = mapper;
-            _configuration = configuration;
+            _logger = logger;
         }
 
         [Route("books")]
         [HttpGet]
         public async Task<IActionResult> Books(string order)
         {
+            _logger.LogInformation("Executing [HttpGet] {Action} with parameters: {Parameters}",
+                nameof(Books), JsonSerializer.Serialize(order));
+
             var books = await _repository.GetBooks();
 
             var booksOrdered = _mapper.Map<List<BookOrdered>>(books);
@@ -42,6 +49,9 @@ namespace Library.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBookByGenre(string? genre)
         {
+            _logger.LogInformation("Executing [HttpGet] {Action} with parameters: {Parameters}",
+                nameof(GetBookByGenre), JsonSerializer.Serialize(genre));
+
             var books = await _repository.GetBooks();
 
             var booksDTO = _mapper.Map<List<BookOrdered>>(books);
@@ -70,6 +80,9 @@ namespace Library.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBookDetails(int id)
         {
+            _logger.LogInformation("Executing [HttpGet] {Action} with parameters: {Parameters}",
+                nameof(GetBookDetails), JsonSerializer.Serialize(id));
+
             var books = await _repository.GetBooks();
 
             var booksDTO = _mapper.Map<List<BookDetail>>(books);
@@ -83,6 +96,9 @@ namespace Library.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id, string secret)
         {
+            _logger.LogInformation("Executing [HttpDelete] {Action} with parameters: {Parameters}, {Secret}",
+                nameof(Delete), JsonSerializer.Serialize(id), JsonSerializer.Serialize(secret));
+
             if (secret != _configuration["SecretKey"])
                 return BadRequest();
 
@@ -95,6 +111,9 @@ namespace Library.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdate(BookDto book)
         {
+            _logger.LogInformation("Executing [HttpPost] {Action} with parameters: {Parameters}",
+                nameof(CreateOrUpdate), JsonSerializer.Serialize(book));
+
             if (!ModelState.IsValid)
                 return BadRequest();
 
@@ -110,6 +129,9 @@ namespace Library.Controllers
         [HttpPut]
         public async Task<IActionResult> SaveReview(int id, ReviewDto review)
         {
+            _logger.LogInformation("Executing [HttpPut] {Action} with parameters: id: {Parameters}, Review: {review}",
+                nameof(SaveReview), JsonSerializer.Serialize(id), JsonSerializer.Serialize(review));
+
             if (!ModelState.IsValid)
                 return BadRequest();
 
@@ -125,6 +147,9 @@ namespace Library.Controllers
         [HttpPut]
         public async Task<IActionResult> SaveRating(int id, RatingDto rating)
         {
+            _logger.LogInformation("Executing [HttpPut] {Action} with parameters: id: {Parameters}, Rating: {review}",
+                nameof(SaveReview), JsonSerializer.Serialize(id), JsonSerializer.Serialize(rating));
+
             if (!ModelState.IsValid)
                 return BadRequest();
 

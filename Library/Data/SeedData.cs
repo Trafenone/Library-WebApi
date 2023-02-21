@@ -199,9 +199,9 @@
                     Book = books[0],
                 },
                 new Rating
-                { 
+                {
                     Score = 4,
-                    Book = books[1], 
+                    Book = books[1],
                 },
                 new Rating
                 {

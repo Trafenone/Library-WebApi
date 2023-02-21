@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddTransient<IRepository, Repository>();
-builder.Services.AddAutoMapper(typeof(AppMappingProfile));
+builder.Services.AddAutoMapper(typeof(AppMappingProfile)); 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

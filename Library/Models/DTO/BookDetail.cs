@@ -1,6 +1,4 @@
-﻿using Library.Data;
-
-namespace Library.Models.DTO
+﻿namespace Library.Models.DTO
 {
     public class BookDetail
     {

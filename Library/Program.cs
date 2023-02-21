@@ -1,6 +1,7 @@
 using Library.Data;
 using Library.Mapping;
 using Library.Models.Repository;
+using Microsoft.AspNetCore.HttpLogging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,11 @@ builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpLogging(logging =>
+    logging.LoggingFields = HttpLoggingFields.RequestMethod | HttpLoggingFields.RequestPath | 
+    HttpLoggingFields.RequestQuery | HttpLoggingFields.ResponseStatusCode | 
+    HttpLoggingFields.RequestBody
+);
 
 var app = builder.Build();
 
@@ -24,6 +30,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHttpLogging();
 
 var scoped = app.Services.CreateScope();
 SeedData.EnsurePopulated(scoped.ServiceProvider.GetRequiredService<ApplicationDbContext>());

@@ -11,8 +11,8 @@ namespace Library.Models.DTO
         public string Title { get; set; }
         public string? Cover { get; set; }
         [Required(ErrorMessage = "{0} is Required")]
-        [StringLength(255, MinimumLength = 3,
-        ErrorMessage = "Content should be minimum 3 characters and maximum of 255 characters")]
+        [StringLength(500,MinimumLength = 3,
+        ErrorMessage = "Content should be minimum 3 characters and maximum of 500 characters")]
         public string Content { get; set; }
         [Required(ErrorMessage = "{0} is Required")]
         [StringLength(50, MinimumLength = 3,

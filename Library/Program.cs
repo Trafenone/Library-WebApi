@@ -7,13 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddTransient<IRepository, Repository>();
-builder.Services.AddAutoMapper(typeof(AppMappingProfile)); 
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpLogging(logging =>
-    logging.LoggingFields = HttpLoggingFields.RequestMethod | HttpLoggingFields.RequestPath | 
-    HttpLoggingFields.RequestQuery | HttpLoggingFields.ResponseStatusCode | 
+    logging.LoggingFields = HttpLoggingFields.RequestMethod | HttpLoggingFields.RequestPath |
+    HttpLoggingFields.RequestQuery | HttpLoggingFields.ResponseStatusCode |
     HttpLoggingFields.RequestBody
 );
 
@@ -24,6 +24,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder => builder.WithOrigins("http://localhost:4200")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod());
 
 app.UseHttpsRedirection();
 
